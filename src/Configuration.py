@@ -1,5 +1,6 @@
 import os
 
+
 class Configuration:
     LOCAL_FILE_NAME = "PT5M.json"
     FIRST_BACKFILL_DURATION = 90
@@ -19,7 +20,7 @@ class Configuration:
         return property with environment specific letter within
         """
         return property.format(dtap_letter= self.environment)
-    
+
     def get_env_variable(self, variable):
         """
         Get Environment Variable

@@ -1,11 +1,14 @@
 import socket
 import os
+import logging
 from azure.identity import ManagedIdentityCredential, DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from datetime import date, datetime, timedelta, timezone
 from Configuration import Configuration
 from export_queries import ALL_QUERIES
 from Model import Query
+
+Logger = logging.getLogger(__name__)
 
 
 class Helper:
@@ -23,7 +26,7 @@ class Helper:
             return False
 
     def get_azcredentials(self):
-        """Obtain Azure Managed Identity Credentials 
+        """Obtain Azure Managed Identity Credentials
         on ABN laptop somehow ManagedIdentityCredential does not work as it stucks between underlying api call
         and it never returns result, so checking isworkstation() to run it on local machine
         On Cluster it will get Pod Identity assigned to this pod
@@ -46,6 +49,7 @@ class Helper:
             vault_url=vault_url, credential=credentials, connection_verify=False
         )
         self.logger.info(f"Getting the secret for {secret_name}")
+
         secret_key = secret_client.get_secret(secret_name).value
         return secret_key
 

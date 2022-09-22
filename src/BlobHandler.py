@@ -1,4 +1,7 @@
 from azure.storage.blob import BlobServiceClient
+import logging
+
+Logger = logging.getLogger(__name__)
 
 
 class BlobHandler:

@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 
@@ -62,7 +63,7 @@ def export_data(la_handler, blob_handler, table_name, base_la_query, query_versi
 def main():
 
     configurations = Configuration()
-    logger = Logger( name="ladataexport", print_level=logging.DEBUG).get_logger(name="ladataexport")
+    logger = logging.getLogger(__name__)
     helper = Helper(configurations, logger)
 
     start_export_time = datetime.now(helper.get_current_timezone_info())

@@ -1,6 +1,10 @@
 from azure.core.exceptions import HttpResponseError
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 import pandas as pd
+import logging
+
+Logger = logging.getLogger(__name__)
+
 
 class LogAnalyticsHandler:
     """A handler to executes a KQL on a Azure Log Analytics Workspace
