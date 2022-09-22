@@ -1,5 +1,4 @@
 from azure.storage.blob import BlobServiceClient
-from cyberwolveslogger.logger import Logger
 
 
 class BlobHandler:

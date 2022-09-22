@@ -4,5 +4,4 @@ azure-keyvault-secrets
 azure-identity
 azure-storage-blob
 azure-monitor-query
-cyberwolveslogger == 0.0.1
 pandas

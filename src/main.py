@@ -6,7 +6,6 @@ from Helper import Helper
 from Configuration import Configuration
 from LogAnalyticsHandler import LogAnalyticsHandler
 from BlobHandler import BlobHandler
-from cyberwolveslogger.logger import Logger, logging
 
 
 def export_data(la_handler, blob_handler, table_name, base_la_query, query_version, start_export_time, start_time, end_time, helper, configuration, logger):
@@ -22,14 +21,14 @@ def export_data(la_handler, blob_handler, table_name, base_la_query, query_versi
         start_end: query end timestamp
         helper: instance of helper class
         configuration: instance of configuration class to get all configuration data
-        logger: instance of logger class to log 
+        logger: instance of logger class to log
     """
     blob_path = helper.build_directory_path(table_name, query_version)
     logger.info(
         f"getting data for time range {start_time} and {end_time}")
     df = la_handler.run_query(
         base_la_query, start_time, end_time)
-    
+
     if df is not None and df.size > 0:
         json_result = df.to_json(orient="records")
 

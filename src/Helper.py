@@ -3,7 +3,6 @@ import os
 from azure.identity import ManagedIdentityCredential, DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from datetime import date, datetime, timedelta, timezone
-from cyberwolveslogger.logger import Logger
 from Configuration import Configuration
 from export_queries import ALL_QUERIES
 from Model import Query
