@@ -1,0 +1,4 @@
+[run]
+omit =
+# externally copied file. useless to build test for
+        *dbtvault_generator* 
