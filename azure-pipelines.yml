@@ -36,21 +36,21 @@ stages:
           exit 0
         displayName: SoftPylint
         continueOnError: true
-        
-        - bash: |
-    # creating whl packages
 
-    python setup.py bdist_wheel
+    - job: PythonDependecies
+      steps:
+      - bash: |
+          # creating whl packages
+          python setup.py bdist_wheel
+          whl_package=$(echo dist/*.whl)
+          echo "WHL PACKAGE: ${whl_package}"
+        displayName: 'Creating packages from setup'
+        target: python
 
-    whl_package=$(echo dist/*.whl)
-    echo "WHL PACKAGE: ${whl_package}"
-  displayName: 'Creating packages from setup'
-  target: python
-
-- task: PublishPipelineArtifact@1
-  inputs:
-    artifact: "PrescanBuild"
-    targetPath: dist
-    publishLocation: 'pipeline'
-  displayName: 'Publishing PrescanBuild packages'
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifact: "PrescanBuild"
+          targetPath: dist
+          publishLocation: 'pipeline'
+        displayName: 'Publishing PrescanBuild packages'
 
