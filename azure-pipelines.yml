@@ -156,7 +156,7 @@ stages:
 
       - task: PublishBuildArtifacts@1
         inputs:
-          artifactName: ${{ parameters.artifact_name }}
+          artifactName: artifact_name
           pathToPublish: dist_folder
           publishLocation: 'Container'
         displayName: 'Publishing scanned packages'
@@ -166,5 +166,5 @@ stages:
           echo "Virtual environment: ${VIRTUAL_ENV}"
           twine upload -r "<feed or service connection name>" --config-file $(PYPIRC_PATH) <package path/files>
         displayName: 'Publish package to Azure Artifacts'
-        condition: and(succeeded(), eq(${{ parameters.publish_to_artifacts }}, true))
+        condition: and(succeeded(), eq(false, true))
 
