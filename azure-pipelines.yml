@@ -110,3 +110,25 @@ stages:
           PathtoPublish: '$(Common.TestResultsDirectory)'
           ArtifactName: 'codecoveragereport'
         condition: succeededOrFailed()
+
+    - job: SonarQubeScan
+      # TODO
+
+    - job: NexusLCScan
+      # TODO
+
+    - job: FortifyScan
+      # TODO
+
+    - job: PackageAndPublish
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - script: |
+          system_package=''
+          system_package='--system-site-packages';
+          echo "Installing system packages";
+          python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+        displayName: Create Virtual Environment
