@@ -168,3 +168,6 @@ stages:
         displayName: 'Publish package to Azure Artifacts'
         condition: and(succeeded(), eq(false, true))
 
+    - job: DockerSTPLCICD
+      # TODO
+
