@@ -79,7 +79,7 @@ stages:
       pool:
         vmImage: ubuntu-latest
       steps:
-            - script: |
+      - script: |
           system_package=''
           system_package='--system-site-packages';
           echo "Installing system packages";
@@ -87,7 +87,7 @@ stages:
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
         displayName: Create Virtual Environment
-        
+
       - task: UseDotNet@2
         displayName: ".NET 6.x"
         inputs:
@@ -96,7 +96,7 @@ stages:
 
       - script: |
           source $(Build.BinariesDirectory)/venv/bin/activate
-          echo "Virtual environment: ${VIRTUAL_ENV}"          
+          echo "Virtual environment: ${VIRTUAL_ENV}"
           pip install pytest pytest-azurepipelines
           pip install pytest-cov
           pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
