@@ -55,7 +55,7 @@ stages:
     #       publishLocation: 'pipeline'
     #     displayName: 'Publishing PrescanBuild packages'
 
-    - job: PythonPreDependecies
+    - job: PythonDependecies
       steps:
       - script: |
           system_package=''
@@ -65,18 +65,18 @@ stages:
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
           pip install -U pip setuptools wheel
-        displayName: Create virtual environment
-        
-          - script: |
-      source $(Build.BinariesDirectory)/venv/bin/activate
-      echo "Virtual environment: ${VIRTUAL_ENV}"
-      pip install $(Build.ArtifactStagingDirectory)/*.whl
-    displayName: Install custom dependencies
-    target: ${{ parameters.target }}
+        displayName: Create Virtual Environment
 
-- script: |
-    source $(Build.BinariesDirectory)/venv/bin/activate
-    echo "Virtual environment: ${VIRTUAL_ENV}"
-    pip install -r ${{ parameters.requirements_file_source }}
-  displayName: 'Install dependencies'
-  target: ${{ parameters.target }}
+      - script: |
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+          pip install $(Build.ArtifactStagingDirectory)/*.whl
+        displayName: Install custom dependencies
+        target: python
+
+      - script: |
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+          pip install -r $(Build.ArtifactStagingDirectory)/requirements.txt
+        displayName: 'Install dependencies'
+        target: python
