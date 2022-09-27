@@ -29,15 +29,15 @@ steps:
     echo "Virtual environment: ${VIRTUAL_ENV}"
     pip install -U pip setuptools wheel
   displayName: Create virtual environment
-  
-  - script: |
+
+- script: |
     source $(Build.BinariesDirectory)/venv/bin/activate
     echo "Virtual environment: ${VIRTUAL_ENV}"
     pip install pylint
 
-    cd ${{ parameters.pylint_root_path }} && find . -type d \( -path ./.git -o -path ./dist -o -path ./builds \) -prune -o -name '*.py' -print0 | xargs -0 pylint -j 0 ${{ parameters.pylint_arguments }}
+    cd . && find . -type d \( -path ./.git -o -path ./dist -o -path ./builds \) -prune -o -name '*.py' -print0 | xargs -0 pylint -j 0 ${{ parameters.pylint_arguments }}
 
     exit 0
   displayName: SoftPylint
   continueOnError: true
-  
+
