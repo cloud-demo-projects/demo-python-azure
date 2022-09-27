@@ -17,3 +17,15 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
+  
+- script: |
+      system_package=''
+      system_package='--system-site-packages'; 
+      echo "Installing system packages";
+      
+      python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
+
+      source $(Build.BinariesDirectory)/venv/bin/activate
+      echo "Virtual environment: ${VIRTUAL_ENV}"
+      pip install -U pip setuptools wheel
+    displayName: Create virtual environment
