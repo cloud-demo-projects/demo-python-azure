@@ -56,6 +56,8 @@ stages:
     #     displayName: 'Publishing PrescanBuild packages'
 
     - job: PythonDependecies
+      pool:
+        vmImage: ubuntu-latest
       steps:
       - script: |
           system_package=''
