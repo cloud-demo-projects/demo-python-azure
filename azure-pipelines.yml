@@ -50,7 +50,7 @@ stages:
     #       publishLocation: 'pipeline'
     #     displayName: 'Publishing PrescanBuild packages'
 
-    - job: PythonDependecies
+    - job: PythonDependeciesAndTest
       pool:
         vmImage: ubuntu-latest
       steps:
@@ -74,19 +74,6 @@ stages:
           echo "Virtual environment: ${VIRTUAL_ENV}"
           pip install -r $(Build.SourcesDirectory)/requirements.txt
         displayName: 'Install Requirements'
-
-    - job: PythonTest
-      pool:
-        vmImage: ubuntu-latest
-      steps:
-      - script: |
-          system_package=''
-          system_package='--system-site-packages';
-          echo "Installing system packages";
-          python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
-          source $(Build.BinariesDirectory)/venv/bin/activate
-          echo "Virtual environment: ${VIRTUAL_ENV}"
-        displayName: Create Virtual Environment
 
       - task: UseDotNet@2
         displayName: ".NET 6.x"
