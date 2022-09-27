@@ -1,5 +1,17 @@
 # Demo Python With Azure
-Sample project to play around Azure with Python
+Sample project to play around Azure with Python containing Python standard project structure.
+
+repository
+  ├── LICENSE
+  ├── README.md
+  ├── src/
+  │   └── package_name/
+  ├── tests/
+  ├── docs/
+  ├── requirements.txt
+  ├── azure-pipeline.yml
+  ├── sonar-project.properties
+  └── setup.py
 
 # Features
 ## Python Docker Base Image
