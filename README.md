@@ -1,7 +1,13 @@
 # Demo Python With Azure
 Sample project to play around Azure with Python
 
-## Python CI
+# Features
+## Python Docker Base Image
+- Mandatory Labels
+- Proxies if any to be configured
+- Common requirements installation
+
+## Python CI STPL
 - Linting
 - Versioning
 - Unit Testing
@@ -11,7 +17,7 @@ Sample project to play around Azure with Python
 - Static code scanning for security issues e.g. Fortify Scan
 - Publishing Artifact
 
-## Docker CI/CD
+## Docker CI/CD STPL
 - Hadonlint Scan
 - Container Build
 - COntainer Structure Tests
