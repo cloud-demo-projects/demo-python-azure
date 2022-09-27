@@ -160,13 +160,15 @@ stages:
           pathToPublish: dist_folder
           publishLocation: 'Container'
         displayName: 'Publishing scanned packages'
+        
+      - task: TwineAuthenticate@1
+        displayName: "Twine Authenticate"
+        inputs:
+          artifactFeed: 'demo-python'
 
       - script: |
-          source $(Build.BinariesDirectory)/venv/bin/activate
-          echo "Virtual environment: ${VIRTUAL_ENV}"
-          twine upload -r "<feed or service connection name>" --config-file $(PYPIRC_PATH) <package path/files>
-        displayName: 'Publish package to Azure Artifacts'
-        condition: and(succeeded(), eq(false, true))
+          python -m twine upload -r demo-python --config-file $(PYPIRC_PATH) dist/*gz
+        displayName: 'publish'
 
     - job: DockerSTPLCICD
       # TODO
