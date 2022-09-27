@@ -72,7 +72,6 @@ stages:
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
           pip install -U pip setuptools wheel
-          #pip install $(Build.ArtifactStagingDirectory)/*.whl
         displayName: Install custom dependencies
 
       - script: |
