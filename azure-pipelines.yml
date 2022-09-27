@@ -72,10 +72,10 @@ stages:
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
           pip install -U pip setuptools wheel
-        displayName: Install custom dependencies
+        displayName: Install Dependencies
 
       - script: |
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
-          pip install -r $(Build.ArtifactStagingDirectory)/requirements.txt
-        displayName: 'Install dependencies'
+          pip install -r $(Build.SourcesDirectory)/requirements.txt
+        displayName: 'Install Requirements'
