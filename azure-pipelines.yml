@@ -153,7 +153,6 @@ stages:
           echo "PACKAGE: ${python_package}"
           pip install -U twine
         displayName: 'Creating packages from setup'
-        target: "${{ parameters.target }}"
 
       - task: PublishBuildArtifacts@1
         inputs:
