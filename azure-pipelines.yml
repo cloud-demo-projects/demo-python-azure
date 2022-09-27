@@ -66,13 +66,13 @@ stages:
           python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
-          pip install -U pip setuptools wheel
         displayName: Create Virtual Environment
 
       - script: |
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
-          pip install $(Build.ArtifactStagingDirectory)/*.whl
+          pip install -U pip setuptools wheel
+          #pip install $(Build.ArtifactStagingDirectory)/*.whl
         displayName: Install custom dependencies
 
       - script: |
