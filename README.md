@@ -10,4 +10,13 @@ Sample project to play around Azure with Python
 - Third party library vulnerability scanning e.g. NexusIQ
 - Static code scanning for security issues e.g. Fortify Scan
 - Publishing Artifact
-- Docker pipeline
+
+## Docker CI/CD
+- Hadonlint Scan
+- Container Build
+- COntainer Structure Tests
+- Static Security Scan e.g. PCC
+- Smoke Test
+- Versioning
+- Optionally add extra docker tags
+- Publishing to Registry
