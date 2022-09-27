@@ -101,7 +101,6 @@ stages:
           pip install pytest-cov
           pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
         displayName: 'Test with pytest'
-        target: "${{ parameters.target }}"
 
       - task: PublishTestResults@2
         displayName: 'Publish Test Results'
