@@ -85,50 +85,49 @@ stages:
         vmImage: ubuntu-latest
       steps:
       - task: UseDotNet@2
-  displayName: ".NET 6.x"
-  inputs:
-    version: "6.x"
-    packageType: sdk
+        displayName: ".NET 6.x"
+        inputs:
+          version: "6.x"
+          packageType: sdk
 
-- task: PythonScript@0
-  displayName: Prepare Pytest arguments
-  target: "${{ parameters.target }}"
-  inputs:
-    scriptSource: inline
-    script: |
-      pytest_arguments = "${{ parameters.pytest_arguments }}"
+      - task: PythonScript@0
+        displayName: Prepare Pytest arguments
+        inputs:
+          scriptSource: inline
+          script: |
+            pytest_arguments = "${{ parameters.pytest_arguments }}"
 
-      if not pytest_arguments or pytest_arguments.isspace():
-        pytest_arguments = "--doctest-modules --junitxml=$(Common.TestResultsDirectory)/test_report/test-results.xml --cov=${{ parameters.source_location }} ${{ parameters.tests_location }} --cov-report=xml --cov-report=html --cov-branch --cov-report   term-missing --cov-report xml:$(Common.TestResultsDirectory)/test_report/coverage.xml "
+            if not pytest_arguments or pytest_arguments.isspace():
+              pytest_arguments = "--doctest-modules --junitxml=$(Common.TestResultsDirectory)/test_report/test-results.xml --cov=${{ parameters.source_location }} ${{ parameters.tests_location }} --cov-report=xml --cov-report=html --cov-branch --cov-report   term-missing --cov-report xml:$(Common.TestResultsDirectory)/test_report/coverage.xml "
 
-      print("##vso[task.setvariable variable=stpl_pytest_arguments;]{}".format(pytest_arguments))
+            print("##vso[task.setvariable variable=stpl_pytest_arguments;]{}".format(pytest_arguments))
 
-- script: |
-    source $(Build.BinariesDirectory)/venv/bin/activate
-    echo "Virtual environment: ${VIRTUAL_ENV}"
-    pip install pytest pytest-cov pytest-mock
-    ${{ parameters.pytest_call }} ${{ parameters.tests_location }} $(stpl_pytest_arguments)
-  displayName: 'Test with pytest'
-  target: "${{ parameters.target }}"
+      - script: |
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+          pip install pytest pytest-cov pytest-mock
+          ${{ parameters.pytest_call }} ${{ parameters.tests_location }} $(stpl_pytest_arguments)
+        displayName: 'Test with pytest'
+        target: "${{ parameters.target }}"
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results'
-  inputs:
-    testResultsFiles: '$(Common.TestResultsDirectory)/test_report/test-results.xml'
-  condition: always()
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFiles: '$(Common.TestResultsDirectory)/test_report/test-results.xml'
+        condition: always()
 
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage from $(Common.TestResultsDirectory)/test_report/coverage.xml'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(Common.TestResultsDirectory)/test_report/coverage.xml'
-  condition: succeededOrFailed()
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage from $(Common.TestResultsDirectory)/test_report/coverage.xml'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Common.TestResultsDirectory)/test_report/coverage.xml'
+        condition: succeededOrFailed()
 
-  # -- Publishing code coverage task requires dotnetcore SDK, that's why it is seperated into a different job.
-  # -- This just gets the xml to that job.
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(Common.TestResultsDirectory)'
-    ArtifactName: 'codecoveragereport'
-  condition: succeededOrFailed() 
+        # -- Publishing code coverage task requires dotnetcore SDK,seperated into a different job.
+        # -- This just gets the xml to that job.
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          PathtoPublish: '$(Common.TestResultsDirectory)'
+          ArtifactName: 'codecoveragereport'
+        condition: succeededOrFailed()
