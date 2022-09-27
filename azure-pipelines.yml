@@ -132,42 +132,40 @@ stages:
           source $(Build.BinariesDirectory)/venv/bin/activate
           echo "Virtual environment: ${VIRTUAL_ENV}"
         displayName: Create Virtual Environment
-        
-       - script: |
-    source $(Build.BinariesDirectory)/venv/bin/activate
-    echo "Virtual environment: ${VIRTUAL_ENV}"
 
-    # creating tgz and whl packages in $dist_folder
-    python setup.py sdist --dist-dir ${{ parameters.dist_folder }}
-    python setup.py bdist_wheel --dist-dir ${{ parameters.dist_folder }}
+      - script: |
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
 
-    # check if the operation went well or that we should generate errormessage
-    if [ $? != 0 ];
-    then
-      echo "##vso[task.logissue type=error]check your python setup.py configuration, because it failed creating tgz/whl package!"
-      echo "##vso[task.complete result=Failed]Creation of tgz/whl packages failed"
-      exit 0
-    fi;
+          # creating tgz and whl packages in dist_folder
+          python setup.py sdist --dist-dir dist_folder
+          python setup.py bdist_wheel --dist-dir dist_folder
 
-    python_package=$(ls -al ${{ parameters.dist_folder }}/${{ parameters.azure_artifact_extension }})
-    echo "PACKAGE: ${python_package}"
+          # check if the operation went well or that we should generate errormessage
+          if [ $? != 0 ];
+          then
+            echo "##vso[task.logissue type=error]check your python setup.py configuration, because it failed creating tgz/whl package!"
+            echo "##vso[task.complete result=Failed]Creation of tgz/whl packages failed"
+            exit 0
+          fi;
 
-    pip install -U twine
-  displayName: 'Creating packages from setup'
-  target: "${{ parameters.target }}"
-  
-  - task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: ${{ parameters.artifact_name }}
-    pathToPublish: ${{ parameters.dist_folder }}
-    publishLocation: 'Container'
-  displayName: 'Publishing scanned packages'
-  target: "${{ parameters.target }}"
-  
-  - script: |
-    source $(Build.BinariesDirectory)/venv/bin/activate
-    echo "Virtual environment: ${VIRTUAL_ENV}"
-    twine upload -r "<feed or service connection name>" --config-file $(PYPIRC_PATH) <package path/files>
-  displayName: 'Publish package to Azure Artifacts'
-  condition: and(succeeded(), eq(${{ parameters.publish_to_artifacts }}, true))
-  target: "${{ parameters.target }}"
+          python_package=$(ls -al dist_folder/*.whl)
+          echo "PACKAGE: ${python_package}"
+          pip install -U twine
+        displayName: 'Creating packages from setup'
+        target: "${{ parameters.target }}"
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          artifactName: ${{ parameters.artifact_name }}
+          pathToPublish: dist_folder
+          publishLocation: 'Container'
+        displayName: 'Publishing scanned packages'
+
+      - script: |
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+          twine upload -r "<feed or service connection name>" --config-file $(PYPIRC_PATH) <package path/files>
+        displayName: 'Publish package to Azure Artifacts'
+        condition: and(succeeded(), eq(${{ parameters.publish_to_artifacts }}, true))
+
