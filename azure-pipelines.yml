@@ -57,19 +57,26 @@ stages:
 
     - job: PythonPreDependecies
       steps:
-      - checkout: git:<dependecyrepo>
-      - bash: |
-          # creating whl packages
-          python setup.py bdist_wheel
-          whl_package=$(echo dist/*.whl)
-          echo "WHL PACKAGE: ${whl_package}"
-        displayName: 'Creating packages from setup'
-        target: python
+      - script: |
+          system_package=''
+          system_package='--system-site-packages';
+          echo "Installing system packages";
+          python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+          pip install -U pip setuptools wheel
+        displayName: Create virtual environment
+        
+          - script: |
+      source $(Build.BinariesDirectory)/venv/bin/activate
+      echo "Virtual environment: ${VIRTUAL_ENV}"
+      pip install $(Build.ArtifactStagingDirectory)/*.whl
+    displayName: Install custom dependencies
+    target: ${{ parameters.target }}
 
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifact: "PrescanBuild"
-          targetPath: dist
-          publishLocation: 'pipeline'
-        displayName: 'Publishing PrescanBuild packages'
-
+- script: |
+    source $(Build.BinariesDirectory)/venv/bin/activate
+    echo "Virtual environment: ${VIRTUAL_ENV}"
+    pip install -r ${{ parameters.requirements_file_source }}
+  displayName: 'Install dependencies'
+  target: ${{ parameters.target }}
