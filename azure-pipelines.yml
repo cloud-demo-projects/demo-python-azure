@@ -79,29 +79,27 @@ stages:
       pool:
         vmImage: ubuntu-latest
       steps:
+            - script: |
+          system_package=''
+          system_package='--system-site-packages';
+          echo "Installing system packages";
+          python3 -m venv ${system_package} $(Build.BinariesDirectory)/venv
+          source $(Build.BinariesDirectory)/venv/bin/activate
+          echo "Virtual environment: ${VIRTUAL_ENV}"
+        displayName: Create Virtual Environment
+        
       - task: UseDotNet@2
         displayName: ".NET 6.x"
         inputs:
           version: "6.x"
           packageType: sdk
 
-      - task: PythonScript@0
-        displayName: Prepare Pytest arguments
-        inputs:
-          scriptSource: inline
-          script: |
-            pytest_arguments = "${{ parameters.pytest_arguments }}"
-
-            if not pytest_arguments or pytest_arguments.isspace():
-              pytest_arguments = "--doctest-modules --junitxml=$(Common.TestResultsDirectory)/test_report/test-results.xml --cov=${{ parameters.source_location }} ${{ parameters.tests_location }} --cov-report=xml --cov-report=html --cov-branch --cov-report   term-missing --cov-report xml:$(Common.TestResultsDirectory)/test_report/coverage.xml "
-
-            print("##vso[task.setvariable variable=stpl_pytest_arguments;]{}".format(pytest_arguments))
-
       - script: |
           source $(Build.BinariesDirectory)/venv/bin/activate
-          echo "Virtual environment: ${VIRTUAL_ENV}"
-          pip install pytest pytest-cov pytest-mock
-          ${{ parameters.pytest_call }} ${{ parameters.tests_location }} $(stpl_pytest_arguments)
+          echo "Virtual environment: ${VIRTUAL_ENV}"          
+          pip install pytest pytest-azurepipelines
+          pip install pytest-cov
+          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
         displayName: 'Test with pytest'
         target: "${{ parameters.target }}"
 
